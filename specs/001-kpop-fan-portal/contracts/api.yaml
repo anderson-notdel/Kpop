@@ -1,0 +1,196 @@
+openapi: 3.1.0
+info:
+  title: K-Pop Fan Portal API (Lean MVP)
+  description: Minimal API for news feed and idol directory
+  version: 1.0.0
+
+servers:
+  - url: /api/v1
+
+paths:
+  /articles:
+    get:
+      summary: List news articles
+      operationId: listArticles
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 50
+        - name: group_id
+          in: query
+          description: Filter by idol group
+          schema:
+            type: string
+            format: uuid
+        - name: featured
+          in: query
+          description: Only featured articles
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Paginated article list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleListResponse'
+
+  /articles/{slug}:
+    get:
+      summary: Get article by slug
+      operationId: getArticle
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Article detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleDetail'
+        '404':
+          description: Not found
+
+  /groups:
+    get:
+      summary: List idol groups
+      operationId: listGroups
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Paginated group list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupListResponse'
+
+  /groups/{id}:
+    get:
+      summary: Get group by ID
+      operationId: getGroup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Group detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDetail'
+        '404':
+          description: Not found
+
+components:
+  schemas:
+    ArticleSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        slug:
+          type: string
+        summary:
+          type: string
+        thumbnail_url:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+        group:
+          $ref: '#/components/schemas/GroupSummary'
+        is_featured:
+          type: boolean
+      required: [id, title, slug, published_at]
+
+    ArticleDetail:
+      allOf:
+        - $ref: '#/components/schemas/ArticleSummary'
+        - type: object
+          properties:
+            content:
+              type: string
+            source_url:
+              type: string
+          required: [content, source_url]
+
+    ArticleListResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleSummary'
+        count:
+          type: integer
+        next:
+          type: string
+        previous:
+          type: string
+      required: [results, count]
+
+    GroupSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        image_url:
+          type: string
+      required: [id, name]
+
+    GroupDetail:
+      allOf:
+        - $ref: '#/components/schemas/GroupSummary'
+        - type: object
+          properties:
+            description:
+              type: string
+            is_active:
+              type: boolean
+
+    GroupListResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupSummary'
+        count:
+          type: integer
+        next:
+          type: string
+        previous:
+          type: string
+      required: [results, count]
