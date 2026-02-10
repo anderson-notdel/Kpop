@@ -1,71 +1,39 @@
-# Quickstart: K-Pop Fan Portal (Lean MVP)
-
-**Feature**: 001-kpop-fan-portal
-**Date**: 2026-01-28
-
-Quick setup guide for the minimal MVP.
+# Quickstart: K-Pop Event Hub
 
 ## Prerequisites
 
-- Python 3.11+
-- Node.js 20+
-- PostgreSQL 15+
+- Python 3.11+, Node.js 20+, PostgreSQL 15+
+- Ticketmaster API key (free: https://developer.ticketmaster.com/)
+- SendGrid API key (free tier: https://sendgrid.com/)
 
-## Backend Setup
+## Backend
 
 ```bash
 cd backend
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install django djangorestframework psycopg2-binary scrapy pydantic
-
-# Configure database
-export DATABASE_URL="postgres://user:pass@localhost:5432/kpop"
-
-# Run migrations
+python -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env                               # edit credentials
 python manage.py migrate
-
-# Create admin user
 python manage.py createsuperuser
-
-# Seed sample groups
 python manage.py loaddata initial_groups.json
-
-# Start server
+python manage.py sync_ticketmaster
 python manage.py runserver
 ```
 
-## Frontend Setup
+## Frontend
 
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Configure API URL
-echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1" > .env.local
-
-# Start dev server
+cp .env.example .env.local                         # edit credentials
 npm run dev
 ```
 
-## Run Scraper
+## Verify
 
-```bash
-cd backend
-python manage.py run_scraper  # or: scrapy crawl soompi
-```
-
-## Verify Setup
-
-1. Backend API: http://localhost:8000/api/v1/articles
-2. Django Admin: http://localhost:8000/admin
-3. Frontend: http://localhost:3000
+- Backend API: http://localhost:8000/api/v1/events
+- Django Admin: http://localhost:8000/admin
+- Frontend: http://localhost:3000
 
 ## Environment Variables
 
@@ -75,31 +43,14 @@ DATABASE_URL=postgres://user:pass@localhost:5432/kpop
 SECRET_KEY=your-secret-key
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
+TICKETMASTER_API_KEY=
+SENDGRID_API_KEY=
+SENDGRID_FROM_EMAIL=noreply@yourdomain.com
 ```
 
 **Frontend (.env.local)**:
 ```
 NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
-SHOPIFY_STOREFRONT_TOKEN=your-token
-SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
-```
-
-## Deploy (MVP)
-
-**Frontend (Vercel)**:
-```bash
-cd frontend
-vercel
-```
-
-**Backend (VPS)**:
-```bash
-# On VPS
-git clone <repo>
-cd backend
-pip install -r requirements.txt
-gunicorn kpop.wsgi:application
-
-# Add cron for scraper (every 4 hours)
-0 */4 * * * cd /path/to/backend && python manage.py run_scraper
+NEXT_PUBLIC_ANNOUNCEMENT_TEXT=Welcome to K-Pop Event Hub!
+NEXT_PUBLIC_ANNOUNCEMENT_LINK=
 ```

@@ -1,24 +1,27 @@
 # Kpop Development Guidelines
 
-**Scope**: Lean MVP — single scraper, groups only, localStorage follows, Shopify redirect
-**Last updated**: 2026-02-05
+**Scope**: Lean MVP — Event calendar + email subscriptions, English only
+**Last updated**: 2026-02-09
 
 ## Active Technologies
 
-- **Backend**: Python 3.11, Django 5.x, Django REST Framework, Scrapy 2.x, Pydantic
+- **Backend**: Python 3.11, Django 5.x, Django REST Framework
 - **Frontend**: TypeScript 5.x, Next.js 14, Tailwind CSS 3.x
 - **Database**: PostgreSQL 15+
-- **Commerce**: Shopify Storefront API (external checkout links only)
+- **Event Data**: Ticketmaster Discovery API
+- **Email**: SendGrid
 
 ## Project Structure
 
 ```text
 backend/
-├── kpop/           # Django project settings
+├── kpop/              # Django project (settings, urls, wsgi)
 ├── apps/
-│   ├── news/       # NewsArticle model, views, serializers
-│   └── artists/    # IdolGroup model, views, serializers
-├── scrapers/       # Scrapy spiders (Soompi)
+│   ├── events/        # Event model, views, serializers, admin
+│   ├── artists/       # ArtistGroup model, views, serializers, admin
+│   └── subscribers/   # Subscriber model, views, serializers, admin
+├── services/          # ticketmaster.py, notifications.py
+├── fixtures/          # initial_groups.json
 ├── tests/
 ├── requirements.txt
 ├── Dockerfile
@@ -26,10 +29,14 @@ backend/
 
 frontend/
 ├── src/
-│   ├── app/        # Next.js pages (feed, article detail)
-│   ├── components/ # ArticleCard, ProductCard, FollowButton
-│   ├── lib/        # API client, localStorage utils
-│   └── styles/     # Tailwind design tokens
+│   ├── app/
+│   │   ├── page.tsx              # Homepage (calendar)
+│   │   ├── layout.tsx            # Root layout + announcement bar
+│   │   ├── events/[slug]/page.tsx
+│   │   └── about/page.tsx
+│   ├── components/    # Calendar, EventCard, CityFilter, SubscribeForm
+│   ├── lib/           # api.ts, types.ts
+│   └── styles/
 ├── next.config.js
 ├── tailwind.config.ts
 └── package.json
@@ -41,17 +48,18 @@ frontend/
 # Backend
 cd backend
 source venv/bin/activate
-python manage.py runserver          # Dev server
-python manage.py migrate            # Run migrations
-python manage.py run_scraper        # Run Soompi scraper
-pytest                              # Run tests
-ruff check .                        # Lint
+python manage.py runserver            # Dev server
+python manage.py migrate              # Run migrations
+python manage.py sync_ticketmaster    # Sync events from Ticketmaster
+python manage.py send_notifications   # Send email notifications
+pytest                                # Run tests
+ruff check .                          # Lint
 
 # Frontend
 cd frontend
-npm run dev                         # Dev server
-npm run build                       # Production build
-npm run lint                        # Lint
+npm run dev                           # Dev server
+npm run build                         # Production build
+npm run lint                          # Lint
 ```
 
 ## Code Style

@@ -1,0 +1,22 @@
+[
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000001", "fields": {"name": "BTS", "slug": "bts", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000002", "fields": {"name": "BLACKPINK", "slug": "blackpink", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000003", "fields": {"name": "TWICE", "slug": "twice", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000004", "fields": {"name": "Stray Kids", "slug": "stray-kids", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000005", "fields": {"name": "aespa", "slug": "aespa", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000006", "fields": {"name": "NewJeans", "slug": "newjeans", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000007", "fields": {"name": "ENHYPEN", "slug": "enhypen", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000008", "fields": {"name": "SEVENTEEN", "slug": "seventeen", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000009", "fields": {"name": "TXT", "slug": "txt", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000010", "fields": {"name": "ITZY", "slug": "itzy", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000011", "fields": {"name": "IVE", "slug": "ive", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000012", "fields": {"name": "LE SSERAFIM", "slug": "le-sserafim", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000013", "fields": {"name": "ATEEZ", "slug": "ateez", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000014", "fields": {"name": "NCT", "slug": "nct", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000015", "fields": {"name": "EXO", "slug": "exo", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000016", "fields": {"name": "GOT7", "slug": "got7", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000017", "fields": {"name": "Red Velvet", "slug": "red-velvet", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000018", "fields": {"name": "MONSTA X", "slug": "monsta-x", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000019", "fields": {"name": "TREASURE", "slug": "treasure", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}},
+  {"model": "artists.artistgroup", "pk": "a0000001-0000-0000-0000-000000000020", "fields": {"name": "(G)I-DLE", "slug": "gi-dle", "is_active": true, "created_at": "2026-02-09T00:00:00Z"}}
+]

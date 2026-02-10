@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash:*)",
+      "Bash(SPECIFY_FEATURE=\"001-kpop-fan-portal\" bash .specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(python -m django startproject:*)",
+      "Bash(python -m venv:*)",
+      "Bash(venvScriptspip install:*)",
+      "Bash(\"venv/Scripts/pip\" install -r requirements.txt)",
+      "Bash(\"venv/Scripts/python\" -m django startproject kpop .)",
+      "Bash(npx create-next-app@14:*)",
+      "Bash(\"venv/Scripts/python\" manage.py makemigrations artists events subscribers)",
+      "Bash(\"venv/Scripts/python\" manage.py migrate)",
+      "Bash(\"venv/Scripts/python\" manage.py loaddata initial_groups.json)",
+      "Bash(\"venv/Scripts/python\" manage.py loaddata fixtures/initial_groups.json)",
+      "Bash(python manage.py check:*)",
+      "Bash(\"venv/Scripts/python\" manage.py check --no-color)",
+      "Bash(\"venv/Scripts/python\" manage.py show_urls)",
+      "Bash(npx next lint)",
+      "Bash(npx tsc:*)",
+      "Bash(\"venv/Scripts/python\" manage.py help sync_ticketmaster)"
+    ]
+  }
+}

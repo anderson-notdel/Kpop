@@ -1,64 +1,40 @@
-# Plan: K-Pop Fan Portal (Lean MVP)
+# Plan: K-Pop Event Hub (Lean MVP)
 
-**Branch**: `001-kpop-fan-portal` | **Spec**: [spec.md](./spec.md)
+**Branch**: `001-kpop-fan-portal` | **Date**: 2026-02-09 | **Spec**: [spec.md](./spec.md)
 
-Solo dev, ship fast: Soompi scraper → Django API → Next.js feed. localStorage follows, Shopify links.
+## Summary
 
-## Stack
+Event calendar for North America K-pop concerts/fan meets. Ticketmaster Discovery API + manual admin entries. Email subscriptions via SendGrid. No auth, no Shopify, no i18n for MVP.
 
-- **Backend**: Python 3.11, Django 5.x + DRF, Scrapy 2.x, PostgreSQL 15+
-- **Frontend**: TypeScript 5.x, Next.js 14, Tailwind CSS
-- **Commerce**: Shopify Storefront API (redirect only, no cart)
-- **Deploy**: Vercel (frontend) + VPS ~$6/mo (backend)
+## Technical Context
 
-## Phases & Tasks
+| Field | Value |
+|-------|-------|
+| Language/Version | Python 3.11, TypeScript 5.x |
+| Primary Dependencies | Django 5.x + DRF, Next.js 14, Tailwind CSS |
+| Storage | PostgreSQL 15+ |
+| Testing | pytest (on request only) |
+| Target Platform | Web (Vercel + VPS) |
+| Project Type | Web app (backend + frontend) |
+| Performance Goals | < 2 s page load on 4G |
+| Constraints | Solo dev, ~$6/mo VPS, free tier services |
+| Scale/Scope | Hundreds of events, < 10k monthly visitors |
 
-### Phase 1: Backend + Models + Admin
-- [ ] Django project with single settings.py + PostgreSQL
-- [ ] IdolGroup model (name, image_url, description, is_active)
-- [ ] NewsArticle model (title, slug, content, thumbnail, source_url, group FK, is_featured)
-- [ ] Django Admin with featured flag
-- [ ] Seed ~20 sample groups (fixture)
+## Constitution Check
 
-### Phase 2: Scraper
-- [ ] Scrapy project + Pydantic schema for articles
-- [ ] Soompi spider
-- [ ] Ingestion pipeline with source_url dedup
-- [ ] Unit test for parsing logic
+| Principle | Status |
+|-----------|--------|
+| I. Ship Lean | Pass — 2 stories, 22 tasks, 3 models |
+| II. Single Responsibility | Pass — Django=API, Next.js=UI, Ticketmaster=events, SendGrid=email |
+| III. No Accounts | Pass — email-only subscription |
+| IV. External Services | Pass — Ticketmaster, SendGrid, Vercel |
+| V. English First | Pass — no i18n |
 
-### Phase 3: API (4 endpoints per api.yaml)
-- [ ] DRF config + pagination + CORS
-- [ ] GET /articles (paginated, filter by group_id/featured)
-- [ ] GET /articles/{slug}
-- [ ] GET /groups (paginated) + GET /groups/{id}
+## Delivery Order
 
-### Phase 4: Frontend
-- [ ] Next.js project + Tailwind + API client + types
-- [ ] ArticleCard component + homepage feed (ISR 60s)
-- [ ] Article detail page (ISR 300s) + OpenGraph meta tags
-- [ ] Loading/error states
+1. **Phase 1–2**: Setup + Models + Admin + API
+2. **Phase 3 (US1)**: Ticketmaster sync + Calendar + Events — **shippable MVP**
+3. **Phase 4 (US2)**: Email subscription + notifications
+4. **Phase 5**: Responsive polish + deploy
 
-### Phase 5: Shopify + Follows + Deploy
-- [ ] Shopify BFF route → 3 featured products on articles
-- [ ] "Buy Now" → Shopify checkout redirect
-- [ ] localStorage follow + FollowButton + feed toggle
-- [ ] Deploy: Vercel + VPS + cron (4h scraper)
-
-## Project Structure
-
-```text
-backend/
-├── kpop/settings.py, urls.py, wsgi.py
-├── apps/{news,artists}/{models,serializers,views,admin}.py
-├── scrapers/kpop_scrapers/spiders/soompi.py
-├── tests/test_scraper.py
-├── requirements.txt
-└── manage.py
-
-frontend/
-├── src/app/{page,layout}.tsx, news/[slug]/page.tsx
-├── src/components/{ArticleCard,ProductCard,FollowButton}.tsx
-├── src/lib/{api,localStorage}.ts
-├── next.config.js
-└── package.json
-```
+See [tasks.md](./tasks.md) for breakdown. Project structure in [CLAUDE.md](../../CLAUDE.md).

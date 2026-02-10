@@ -1,105 +1,90 @@
 openapi: 3.1.0
 info:
-  title: K-Pop Fan Portal API (Lean MVP)
-  description: Minimal API for news feed and idol directory
-  version: 1.0.0
+  title: K-Pop Event Hub API (Lean MVP)
+  version: 2.0.0
 
 servers:
   - url: /api/v1
 
 paths:
-  /articles:
+  /events:
     get:
-      summary: List news articles
-      operationId: listArticles
+      summary: List events
+      operationId: listEvents
       parameters:
         - name: page
           in: query
-          schema:
-            type: integer
-            default: 1
+          schema: { type: integer, default: 1 }
         - name: page_size
           in: query
-          schema:
-            type: integer
-            default: 20
-            maximum: 50
-        - name: group_id
+          schema: { type: integer, default: 20, maximum: 50 }
+        - name: city
           in: query
-          description: Filter by idol group
-          schema:
-            type: string
-            format: uuid
+          schema: { type: string }
+        - name: month
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 12 }
+        - name: year
+          in: query
+          schema: { type: integer }
         - name: featured
           in: query
-          description: Only featured articles
-          schema:
-            type: boolean
+          schema: { type: boolean }
       responses:
         '200':
-          description: Paginated article list
+          description: Paginated event list
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArticleListResponse'
+                $ref: '#/components/schemas/EventListResponse'
 
-  /articles/{slug}:
+  /events/{slug}:
     get:
-      summary: Get article by slug
-      operationId: getArticle
+      summary: Get event detail
+      operationId: getEvent
       parameters:
         - name: slug
           in: path
           required: true
-          schema:
-            type: string
+          schema: { type: string }
       responses:
         '200':
-          description: Article detail
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArticleDetail'
+                $ref: '#/components/schemas/EventDetail'
         '404':
           description: Not found
 
   /groups:
     get:
-      summary: List idol groups
+      summary: List artist groups
       operationId: listGroups
       parameters:
         - name: page
           in: query
-          schema:
-            type: integer
-            default: 1
+          schema: { type: integer, default: 1 }
         - name: page_size
           in: query
-          schema:
-            type: integer
-            default: 50
+          schema: { type: integer, default: 50 }
       responses:
         '200':
-          description: Paginated group list
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GroupListResponse'
 
-  /groups/{id}:
+  /groups/{slug}:
     get:
-      summary: Get group by ID
+      summary: Get group detail
       operationId: getGroup
       parameters:
-        - name: id
+        - name: slug
           in: path
           required: true
-          schema:
-            type: string
-            format: uuid
+          schema: { type: string }
       responses:
         '200':
-          description: Group detail
           content:
             application/json:
               schema:
@@ -107,78 +92,110 @@ paths:
         '404':
           description: Not found
 
+  /cities:
+    get:
+      summary: List cities with upcoming events
+      operationId: listCities
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string }
+
+  /subscribers:
+    post:
+      summary: Subscribe by email
+      operationId: createSubscriber
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberCreate'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriberResponse'
+        '400':
+          description: Validation error
+
+  /subscribers/unsubscribe:
+    post:
+      summary: Unsubscribe by token
+      operationId: unsubscribe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token: { type: string }
+              required: [token]
+      responses:
+        '200':
+          description: Unsubscribed
+
 components:
   schemas:
-    ArticleSummary:
+    EventSummary:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        title:
-          type: string
-        slug:
-          type: string
-        summary:
-          type: string
-        thumbnail_url:
-          type: string
-        published_at:
-          type: string
-          format: date-time
+        id: { type: string, format: uuid }
+        title: { type: string }
+        slug: { type: string }
+        date_time: { type: string, format: date-time }
+        venue: { type: string }
+        city: { type: string }
+        image_url: { type: string }
         group:
           $ref: '#/components/schemas/GroupSummary'
-        is_featured:
-          type: boolean
-      required: [id, title, slug, published_at]
+        is_featured: { type: boolean }
+      required: [id, title, slug, date_time, venue, city]
 
-    ArticleDetail:
+    EventDetail:
       allOf:
-        - $ref: '#/components/schemas/ArticleSummary'
+        - $ref: '#/components/schemas/EventSummary'
         - type: object
           properties:
-            content:
-              type: string
-            source_url:
-              type: string
-          required: [content, source_url]
+            description: { type: string }
+            state_province: { type: string }
+            country: { type: string }
+            ticket_url: { type: string }
+            source: { type: string, enum: [manual, ticketmaster] }
 
-    ArticleListResponse:
+    EventListResponse:
       type: object
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/ArticleSummary'
-        count:
-          type: integer
-        next:
-          type: string
-        previous:
-          type: string
+            $ref: '#/components/schemas/EventSummary'
+        count: { type: integer }
+        next: { type: string }
+        previous: { type: string }
       required: [results, count]
 
     GroupSummary:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        image_url:
-          type: string
-      required: [id, name]
+        id: { type: string, format: uuid }
+        name: { type: string }
+        slug: { type: string }
+        image_url: { type: string }
+      required: [id, name, slug]
 
     GroupDetail:
       allOf:
         - $ref: '#/components/schemas/GroupSummary'
         - type: object
           properties:
-            description:
-              type: string
-            is_active:
-              type: boolean
+            description: { type: string }
+            is_active: { type: boolean }
 
     GroupListResponse:
       type: object
@@ -187,10 +204,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupSummary'
-        count:
-          type: integer
-        next:
-          type: string
-        previous:
-          type: string
+        count: { type: integer }
+        next: { type: string }
+        previous: { type: string }
       required: [results, count]
+
+    SubscriberCreate:
+      type: object
+      properties:
+        email: { type: string, format: email }
+      required: [email]
+
+    SubscriberResponse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string }
+        created_at: { type: string, format: date-time }
