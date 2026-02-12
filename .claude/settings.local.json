@@ -18,7 +18,9 @@
       "Bash(\"venv/Scripts/python\" manage.py show_urls)",
       "Bash(npx next lint)",
       "Bash(npx tsc:*)",
-      "Bash(\"venv/Scripts/python\" manage.py help sync_ticketmaster)"
+      "Bash(\"venv/Scripts/python\" manage.py help sync_ticketmaster)",
+      "Bash(ls:*)",
+      "Bash(curl:*)"
     ]
   }
 }
