@@ -20,7 +20,21 @@
       "Bash(npx tsc:*)",
       "Bash(\"venv/Scripts/python\" manage.py help sync_ticketmaster)",
       "Bash(ls:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run lint:*)",
+      "WebSearch",
+      "WebFetch(domain:ixd.prattsi.org)",
+      "WebFetch(domain:party.pro)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:www.divinectorweb.com)",
+      "WebFetch(domain:eng.butter.us)",
+      "WebFetch(domain:www.framer.com)",
+      "WebFetch(domain:www.letsbuildui.dev)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:partiful.com)",
+      "WebFetch(domain:www.geeksforgeeks.org)",
+      "WebFetch(domain:speckyboy.com)"
     ]
   }
 }

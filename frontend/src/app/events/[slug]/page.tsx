@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getEvent } from "@/lib/api";
+import { formatDateLong, formatTime } from "@/lib/format";
 
 export const revalidate = 300;
 
@@ -22,8 +23,11 @@ export default async function EventDetailPage({ params }: Props) {
   const isPast = date < new Date();
 
   return (
-    <article className="space-y-6">
-      <Link href="/" className="text-sm text-purple-600 hover:underline">
+    <article className="space-y-6 animate-slide-up">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1 text-sm font-medium text-coral-500 hover:underline"
+      >
         &larr; Back to events
       </Link>
 
@@ -31,50 +35,38 @@ export default async function EventDetailPage({ params }: Props) {
         <img
           src={event.image_url}
           alt={event.title}
-          className="h-64 w-full rounded-lg object-cover sm:h-80"
+          className="h-64 w-full rounded-card object-cover sm:h-80"
         />
       )}
 
       <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-2">
           {event.is_featured && (
-            <span className="rounded bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700">
-              Featured
+            <span className="badge bg-coral-50 text-coral-500">
+              ✨ Featured
             </span>
           )}
           {isPast && (
-            <span className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-500">
-              Past Event
-            </span>
+            <span className="badge-muted">Past Event</span>
           )}
         </div>
 
-        <h1 className="text-3xl font-bold">{event.title}</h1>
+        <h1 className="text-3xl font-heading font-bold">{event.title}</h1>
 
         <dl className="grid gap-3 sm:grid-cols-2">
           <div>
-            <dt className="text-sm font-medium text-gray-500">Date & Time</dt>
-            <dd className="text-gray-900">
-              {date.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}{" "}
-              at{" "}
-              {date.toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "2-digit",
-              })}
+            <dt className="text-sm font-heading font-medium text-foreground/40">📅 Date & Time</dt>
+            <dd className="text-foreground">
+              {formatDateLong(date)} at {formatTime(date)}
             </dd>
           </div>
           <div>
-            <dt className="text-sm font-medium text-gray-500">Venue</dt>
-            <dd className="text-gray-900">{event.venue}</dd>
+            <dt className="text-sm font-heading font-medium text-foreground/40">🏟️ Venue</dt>
+            <dd className="text-foreground">{event.venue}</dd>
           </div>
           <div>
-            <dt className="text-sm font-medium text-gray-500">Location</dt>
-            <dd className="text-gray-900">
+            <dt className="text-sm font-heading font-medium text-foreground/40">📍 Location</dt>
+            <dd className="text-foreground">
               {event.city}
               {event.state_province ? `, ${event.state_province}` : ""},{" "}
               {event.country}
@@ -82,16 +74,16 @@ export default async function EventDetailPage({ params }: Props) {
           </div>
           {event.group && (
             <div>
-              <dt className="text-sm font-medium text-gray-500">Artist</dt>
-              <dd className="text-gray-900">{event.group.name}</dd>
+              <dt className="text-sm font-heading font-medium text-foreground/40">🎤 Artist</dt>
+              <dd className="text-foreground">{event.group.name}</dd>
             </div>
           )}
         </dl>
 
         {event.description && (
           <div>
-            <h2 className="mb-2 text-lg font-semibold">About</h2>
-            <p className="text-gray-700 whitespace-pre-line">{event.description}</p>
+            <h2 className="mb-2 text-lg font-heading font-semibold">About</h2>
+            <p className="text-foreground/70 whitespace-pre-line">{event.description}</p>
           </div>
         )}
 
@@ -100,9 +92,9 @@ export default async function EventDetailPage({ params }: Props) {
             href={event.ticket_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block rounded-lg bg-purple-600 px-6 py-3 font-semibold text-white transition hover:bg-purple-700"
+            className="inline-block btn-primary py-3.5"
           >
-            Buy Tickets
+            🎟️ Buy Tickets
           </a>
         )}
       </div>

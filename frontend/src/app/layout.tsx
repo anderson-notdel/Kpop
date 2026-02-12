@@ -1,16 +1,25 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Sora, DM_Sans } from "next/font/google";
 import Link from "next/link";
+import FloatingEmojis from "@/components/FloatingEmojis";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-sora",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-dm-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "K-Pop Event Hub",
+  title: "CRAFTERS - K-Pop Events",
   description: "Discover K-Pop concerts and events across North America",
 };
 
@@ -24,7 +33,7 @@ function AnnouncementBar() {
   );
 
   return (
-    <div className="bg-purple-600 text-white px-4 py-2">
+    <div className="bg-rainbow text-white px-4 py-2">
       {link ? (
         <a href={link} className="hover:underline">
           {content}
@@ -43,32 +52,50 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} font-sans antialiased min-h-screen flex flex-col`}>
-        <AnnouncementBar />
+      <body
+        className={`${sora.variable} ${dmSans.variable} font-body antialiased min-h-screen flex flex-col bg-background text-foreground`}
+      >
+        <FloatingEmojis />
 
-        <header className="border-b border-gray-200 bg-white">
-          <nav className="mx-auto max-w-6xl flex items-center justify-between px-4 py-4">
-            <Link href="/" className="text-xl font-bold text-purple-600">
-              K-Pop Event Hub
-            </Link>
-            <div className="flex gap-6 text-sm font-medium">
-              <Link href="/" className="hover:text-purple-600">
-                Events
+        <header className="fixed top-0 left-0 right-0 z-50">
+          <AnnouncementBar />
+          <nav className="glass border-b border-black/5">
+            <div className="mx-auto max-w-6xl flex items-center justify-between px-8 py-3">
+              <Link href="/" className="text-xl font-heading font-extrabold tracking-tight">
+                <span className="mr-1">🎪</span>
+                <span className="text-rainbow">CRAFTERS</span>
               </Link>
-              <Link href="/about" className="hover:text-purple-600">
-                About
-              </Link>
+              <div className="flex items-center gap-6 text-sm font-medium text-foreground/60">
+                <Link
+                  href="/"
+                  className="hover:text-foreground transition-colors duration-200"
+                >
+                  🎤 Events
+                </Link>
+                <Link
+                  href="/about"
+                  className="hover:text-foreground transition-colors duration-200"
+                >
+                  ✨ About
+                </Link>
+              </div>
             </div>
           </nav>
         </header>
 
-        <main className="flex-1 mx-auto w-full max-w-6xl px-4 py-8">
+        <main className="relative z-10 flex-1 mx-auto w-full max-w-6xl px-8 pt-28 pb-8">
           {children}
         </main>
 
-        <footer className="border-t border-gray-200 bg-gray-50">
-          <div className="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} K-Pop Event Hub
+        <footer className="relative z-10 border-t border-black/5 bg-white/50">
+          <div className="mx-auto max-w-6xl px-8 py-8 text-center">
+            <p className="text-sm font-heading font-bold mb-2">
+              <span className="mr-1">🎪</span>
+              <span className="text-rainbow">CRAFTERS</span>
+            </p>
+            <p className="text-xs text-foreground/40">
+              &copy; {new Date().getFullYear()} CRAFTERS &middot; K-Pop Events
+            </p>
           </div>
         </footer>
       </body>

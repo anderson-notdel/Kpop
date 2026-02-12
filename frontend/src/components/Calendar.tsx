@@ -67,28 +67,28 @@ export default function Calendar({ events, onDateClick }: CalendarProps) {
   for (let d = 1; d <= daysInMonth; d++) cells.push(d);
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4">
+    <div className="rounded-card border-card p-5">
       <div className="mb-4 flex items-center justify-between">
         <button
           onClick={prevMonth}
-          className="rounded px-3 py-1 text-sm hover:bg-gray-100"
+          className="rounded-pill px-4 py-1.5 text-sm font-medium hover:bg-coral-50 transition-colors"
           aria-label="Previous month"
         >
           &larr;
         </button>
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-lg font-heading font-semibold">
           {MONTH_NAMES[month]} {year}
         </h2>
         <button
           onClick={nextMonth}
-          className="rounded px-3 py-1 text-sm hover:bg-gray-100"
+          className="rounded-pill px-4 py-1.5 text-sm font-medium hover:bg-coral-50 transition-colors"
           aria-label="Next month"
         >
           &rarr;
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-gray-500">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-foreground/40">
         {DAY_NAMES.map((d) => (
           <div key={d} className="py-1">
             {d}
@@ -111,17 +111,17 @@ export default function Calendar({ events, onDateClick }: CalendarProps) {
             <button
               key={dateKey}
               onClick={() => dayEvents.length > 0 && onDateClick?.(dateKey)}
-              className={`relative flex h-12 flex-col items-center justify-start rounded p-1 text-sm transition ${
-                isPast ? "text-gray-300" : "text-gray-800"
-              } ${isToday ? "ring-2 ring-purple-500" : ""} ${
-                dayEvents.length > 0 ? "cursor-pointer hover:bg-purple-50" : "cursor-default"
+              className={`relative flex h-12 flex-col items-center justify-start rounded-inner-btn p-1 text-sm transition-all ${
+                isPast ? "text-foreground/25" : "text-foreground/80"
+              } ${isToday ? "ring-2 ring-coral-400" : ""} ${
+                dayEvents.length > 0 ? "cursor-pointer hover:bg-coral-50" : "cursor-default"
               }`}
             >
               <span>{day}</span>
               {dayEvents.length > 0 && (
                 <span
                   className={`mt-0.5 h-1.5 w-1.5 rounded-full ${
-                    isPast ? "bg-gray-300" : "bg-purple-500"
+                    isPast ? "bg-foreground/20" : "bg-coral-500"
                   }`}
                 />
               )}
